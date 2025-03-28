@@ -1,0 +1,4 @@
+Audi,Rs7,2025,180000,/Users/alexblanford/Desktop/Coding/My Codes/car_images/car1.jpg
+Mercedes,C63s,2024,120000,/Users/alexblanford/Desktop/Coding/My Codes/car_images/car2.jpg
+bmw,rs7,2030,40000,/Users/alexblanford/Desktop/Coding/My Codes/car_images/car1.jpg
+Audi,a4,4055,40000,/Users/alexblanford/Desktop/Coding/My Codes/car_images/car1.jpg
