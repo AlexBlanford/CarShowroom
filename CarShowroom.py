@@ -44,16 +44,14 @@ titleName.pack(pady=20)
 
 bottomFrame = tk.Frame(root)
 bottomFrame.pack(side="bottom")
-bottomFrame.pack(padx = 400, pady = 200)
+bottomFrame.pack(fill="both", expand=True, padx=20, pady=20)    
 
 
 tk.Button(root, text="View Cars", fg="blue", width=15, height = 3).pack(side="left", padx=10)
 tk.Button(root, text="Add Car", fg="red", width = 15, height = 3).pack(side="left", padx=10)
-frame = tk.Frame(root)
-frame.pack(padx=10, pady=100, expand = True)
+#frame = tk.Frame(root)
+#frame.pack(padx=10, pady=100, expand = True)
 
-content_frame = tk.Frame(root)
-content_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
 
 
