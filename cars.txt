@@ -1,0 +1,1 @@
+Audi,Rs7,2025,180000,/Users/alexblanford/Desktop/Coding/My Codes/car_images/car1.jpg
