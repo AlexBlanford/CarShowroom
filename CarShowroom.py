@@ -14,6 +14,7 @@ root.geometry("900x700")
 
 cars = []
 
+
 def loadCars():
     global cars
     with open(carFile, "r") as file:
@@ -61,7 +62,7 @@ def showCars():
         tk.Label(carFrame, text=info_text, font=("Arial", 12)).pack()
     
 
-
+#add function next (for adding cars to show cars page)
 
 
 titleName = tk.Label(root, text="Car Showroom", font=("Helvetica", 30, "bold"))
