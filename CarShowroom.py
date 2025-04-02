@@ -60,10 +60,27 @@ def showCars():
         
         info_text = f"{car['make']} {car['model']}\nYear: {car['year']}\nPrice: ${car['price']}"
         tk.Label(carFrame, text=info_text, font=("Arial", 12)).pack()
+        
     
+def addCar():
+    for widget in bottomFrame.winfo_children():
+        widget.destroy()
 
-#add function next (for adding cars to show cars page)
+    tk.Label(bottomFrame, text="Add New Car", font=("Arial", 16, "bold")).pack(pady=10)
 
+    fields = ["Make:", "Model:", "Year:", "Price:", "Image Path:"]
+    entries = []
+    for field in fields:
+        frame = tk.Frame(bottomFrame)
+        frame.pack(fill="x", padx=20, pady=5)
+        tk.Label(frame, text=field, width=12, anchor="w").pack(side="left")
+        entry = tk.Entry(frame)
+        entry.pack(side="left", expand=True, fill="x")
+        entries.append(entry)
+    
+    
+    
+###
 
 titleName = tk.Label(root, text="Car Showroom", font=("Helvetica", 30, "bold"))
 titleName.pack(pady=20)
@@ -73,8 +90,8 @@ bottomFrame.pack(side="bottom")
 bottomFrame.pack(fill="both", expand=True, padx=20, pady=20)    
 
 
-tk.Button(root, text="View Cars", fg="blue", width=15, height = 3).pack(side="left", padx=10)
-tk.Button(root, text="Add Car", fg="red", width = 15, height = 3).pack(side="left", padx=10)
+tk.Button(root, text="View Cars", command = showCars, fg="blue", width=15, height = 3).pack(side="left", padx=10)
+tk.Button(root, text="Add Car", command = addCar, fg="red", width = 15, height = 3).pack(side="left", padx=10)
 
 
 
