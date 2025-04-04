@@ -77,8 +77,27 @@ def addCar():
         entry = tk.Entry(frame)
         entry.pack(side="left", expand=True, fill="x")
         entries.append(entry)
-    
-    
+        
+        
+    def submit_car():
+        data = [entry.get() for entry in entries]
+        if not all(data):
+            messagebox.showwarning("Error", "Please fill in all the fields!")
+            return
+        
+        cars.append({
+            "make": data[0],
+            "model": data[1],
+            "year": data[2],
+            "price": data[3],
+            "image": data[4]
+        })
+        saveCars()
+        messagebox.showinfo("Success", "Car added successfully!")
+        showCars()
+
+    tk.Button(bottomFrame, text="Add Car", command=submit_car, bg="green", fg="white", font=("Times New Roman", 12, "bold")).pack(pady=20)
+
     
 ###
 
