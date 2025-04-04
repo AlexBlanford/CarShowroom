@@ -74,12 +74,12 @@ def addCar():
         frame = tk.Frame(bottomFrame)
         frame.pack(fill="x", padx=20, pady=5)
         tk.Label(frame, text=field, width=12, anchor="w").pack(side="left")
-        entry = tk.Entry(frame)
+        entry = tk.Entry(frame, bg="lightgrey", fg="black")
         entry.pack(side="left", expand=True, fill="x")
         entries.append(entry)
         
         
-    def submit_car():
+    def submitCar():
         data = [entry.get() for entry in entries]
         if not all(data):
             messagebox.showwarning("Error", "Please fill in all the fields!")
@@ -96,7 +96,16 @@ def addCar():
         messagebox.showinfo("Success", "Car added successfully!")
         showCars()
 
-    tk.Button(bottomFrame, text="Add Car", command=submit_car, bg="green", fg="white", font=("Times New Roman", 12, "bold")).pack(pady=20)
+    tk.Button(bottomFrame, text="Add Car", command=submitCar, bg="green", fg="black", font=("Arial", 12, "bold")).pack(pady=20)
+    
+    def browseImage():
+        path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg *.png")])
+        if path:
+            entries[4].delete(0, tk.END)
+            entries[4].insert(0, path)
+
+    browseButton = tk.Button(bottomFrame, text="Browse Image", command=browseImage)
+    browseButton.pack(pady=5)
 
     
 ###
