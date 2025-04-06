@@ -76,9 +76,9 @@ def showCars(sortOption=None):
     sortFrame.pack(fill="x", pady=(0, 20))
 
     carsFrame = tk.Frame(bottomFrame)
-    carsFrame.pack(fill="both", expand=True)
+    carsFrame.pack(fill="both", pady=0)
         
-    tk.Label(sortFrame, text="Sort by:").pack(side="left", padx=5)
+    tk.Label(sortFrame, text="Sort by:").pack(side="left", padx=5, pady=0)
 
     sortVar = tk.StringVar()
     sortVar.set("Default Order") 
@@ -95,7 +95,7 @@ def showCars(sortOption=None):
                                ],
                                state="readonly",
                                width=25)
-    sortDropdown.pack(side="left", padx=5)
+    sortDropdown.pack(side="left", padx=5, pady=0)
     sortDropdown.current(0)  
 
     def applySort(event=None):
