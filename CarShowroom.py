@@ -75,13 +75,18 @@ def showCars(sortOption=None):
     sortFrame = tk.Frame(bottomFrame)
     sortFrame.pack(fill="x", pady=(0, 20))
 
-    carsFrame = tk.Frame(bottomFrame)
-    carsFrame.pack(fill="both", pady=0)
+    sortDisplayayMap = {
+        None: "Default Order",
+        "price_asc": "Price: Low to High",
+        "price_desc": "Price: High to Low",
+        "alpha_asc": "A-Z (Alphabetical)",
+        "alpha_desc": "Z-A (Reverse Alphabetical)",
+        "year_asc": "Year: Oldest First",
+        "year_desc": "Year: Newest First"
+    }
         
-    tk.Label(sortFrame, text="Sort by:").pack(side="left", padx=5, pady=0)
-
     sortVar = tk.StringVar()
-    sortVar.set("Default Order") 
+    
     sortDropdown = ttk.Combobox(sortFrame, 
                                textvariable=sortVar,
                                values=[
@@ -95,25 +100,19 @@ def showCars(sortOption=None):
                                ],
                                state="readonly",
                                width=25)
+    
+    cuurentDisplay = sortDisplayayMap.get(sortOption, "Default Order")
+    sortVar.set(cuurentDisplay) 
     sortDropdown.pack(side="left", padx=5, pady=0)
-    sortDropdown.current(0)  
+
 
     def applySort(event=None):
+        
+        optionMap = {v: k for k, v in sortDisplayayMap.items()}
             
-        selectedOption = sortVar.get()  
+        selectedOption = optionMap[sortVar.get()]
+        showCars(selectedOption)
 
-        optionMap = {
-            "Default Order": None,
-            "Price: Low to High": "price_asc",
-            "Price: High to Low": "price_desc",
-            "A-Z (Alphabetical)": "alpha_asc",
-            "Z-A (Reverse Alphabetical)": "alpha_desc",
-            "Year: Oldest First": "year_asc",
-            "Year: Newest First": "year_desc"
-        }
-        showCars(optionMap[sortVar.get()])
-        sortKey = optionMap.get(selectedOption)
-        print(f"Selected sorting: {selectedOption}, Sort key: {sortKey}")
 
     sortDropdown.bind("<<ComboboxSelected>>", applySort)
     
