@@ -104,27 +104,28 @@ def showCars(sortOption=None):
         displayCars.sort(key=lambda x: int(x["year"]), reverse=True)
 
 
-
-
     for i in range(len(displayCars)):
         car = displayCars[i]
         row = i // 3
         col = i % 3
-    
-        img = Image.open(car["image"])
-        img = img.resize((200, 150), Image.Resampling.LANCZOS)
-        img = ImageTk.PhotoImage(img)
         
-        carFrame = tk.Frame(carsFrame, bd=1, relief="groove")
-        carFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
-        
-        imgLabel = tk.Label(carFrame, image=img)
-        imgLabel.image = img  
-        imgLabel.pack()
-        
-        
-        info_text = f"{car['make']} {car['model']}\nYear: {int(car['year'])}\nPrice: ${int(car['price']):,}"
-        tk.Label(carFrame, text=info_text).pack()
+        try:
+            img = Image.open(car["image"])
+            img = img.resize((200, 150), Image.Resampling.LANCZOS)
+            img = ImageTk.PhotoImage(img)
+            
+            carFrame = tk.Frame(carsFrame, bd=1, relief="groove")
+            carFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
+            
+            imgLabel = tk.Label(carFrame, image=img)
+            imgLabel.image = img  
+            imgLabel.pack()
+            
+            
+            info_text = f"{car['make']} {car['model']}\nYear: {int(car['year'])}\nPrice: ${int(car['price']):,}"
+            tk.Label(carFrame, text=info_text).pack()
+        except Exception as e:
+            print(f"Error loading image for {car['make']} {car['model']}: {e}")
         
         for c in range(3):
             carsFrame.columnconfigure(c, weight=1)
