@@ -145,7 +145,15 @@ def addCar():
         entry.pack(side="left", expand=True, fill="x")
         entries.append(entry)
         
-        
+    def browseImage():
+        path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg *.png")])
+        if path:
+            entries[4].delete(0, tk.END)
+            entries[4].insert(0, path)
+
+    browseButton = tk.Button(bottomFrame, text="Browse Image", command=browseImage)
+    browseButton.pack(pady=5)
+    
     def submitCar():
         data = [entry.get() for entry in entries]
         if not all(data):
@@ -165,14 +173,7 @@ def addCar():
 
     tk.Button(bottomFrame, text="Add Car", command=submitCar, bg="green", fg="black", font=("Arial", 12, "bold")).pack(pady=20)
     
-    def browseImage():
-        path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg *.png")])
-        if path:
-            entries[4].delete(0, tk.END)
-            entries[4].insert(0, path)
-
-    browseButton = tk.Button(bottomFrame, text="Browse Image", command=browseImage)
-    browseButton.pack(pady=5)
+    
 
     
 
