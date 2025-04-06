@@ -132,6 +132,19 @@ def showCars(sortOption=None):
         displayCars.sort(key=lambda x: int(x["year"]), reverse=True)
 
 
+    canvas = tk.Canvas(bottomFrame)
+    scrollBar = ttk.Scrollbar(bottomFrame, orient="vertical", command=canvas.yview)
+    scrollableFrame = tk.Frame(canvas)
+    
+    canvas.configure(yscrollcommand=scrollBar.set)
+    canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+    
+    canvas.pack(side="left", fill="both", expand=True)
+    scrollBar.pack(side="right", fill="y")
+    canvas.create_window((0, 0), window=scrollableFrame, anchor="nw")
+
+
+
     for i in range(len(displayCars)):
         car = displayCars[i]
         row = i // 3
@@ -139,27 +152,33 @@ def showCars(sortOption=None):
         
         try:
             img = Image.open(car["image"])
-            img = img.resize((200, 150), Image.Resampling.LANCZOS)
-            img = ImageTk.PhotoImage(img)
+            img = img.resize((220, 160), Image.Resampling.LANCZOS)
+            imgTK = ImageTk.PhotoImage(img)
             
-            carFrame = tk.Frame(carsFrame, bd=1, relief="groove")
+            carFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white")
             carFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
             
-            imgLabel = tk.Label(carFrame, image=img)
-            imgLabel.image = img  
+            imgLabel = tk.Label(carFrame, image=imgTK, bg="white")
+            imgLabel.image = imgTK  
             imgLabel.pack()
             
             
-            info_text = f"{car['make']} {car['model']}\nYear: {int(car['year'])}\nPrice: ${int(car['price']):,}"
-            tk.Label(carFrame, text=info_text).pack()
+            infoText = f"{car['make']} {car['model']}\nYear: {int(car['year'])}\nPrice: ${float(car['price']):,}"
+            tk.Label(carFrame, text=infoText).pack()
         except Exception as e:
             print(f"Error loading image for {car['make']} {car['model']}: {e}")
+            
+            errorFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white")
+            errorFrame.grid(row=row, column=col, padx=10, pady=10)
+            tk.Label(errorFrame, text=f"Error loading\n{car['make']} {car['model']}", bg="white").pack()
+        
         
         for c in range(3):
-            carsFrame.columnconfigure(c, weight=1)
+            scrollableFrame.columnconfigure(c, weight=1)
         for r in range((len(displayCars) + 2) // 3):
-            carsFrame.rowconfigure(r, weight=1)
+            scrollableFrame.rowconfigure(r, weight=1)
         
+    
     
 def addCar():
     for widget in bottomFrame.winfo_children():
