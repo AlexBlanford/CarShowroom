@@ -3,6 +3,30 @@ from tkinter import ttk, messagebox, filedialog
 from PIL import Image, ImageTk
 
 
+defaultCars = [
+    {
+        "make": "Toyota",
+        "model": "Camry",
+        "year": 2020,
+        "price": 24000,
+        "image": "camry.jpg"
+    },
+    {
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2019,
+        "price": 22000,
+        "image": "civic.jpg"
+    },
+    {
+        "make": "Ford",
+        "model": "Mustang",
+        "year": 2021,
+        "price": 30000,
+        "image": "mustang.jpg"
+    }
+]
+
 carFile = "cars.txt"
 
 root = tk.Tk()
@@ -30,8 +54,12 @@ def loadCars():
                         "price": parts[3],
                         "image": parts[4]
                     })
+        if not cars:
+            cars = defaultCars.copy()
+            saveCars()
     except FileNotFoundError:
-        cars = []
+        cars = defaultCars.copy()
+        saveCars()
 
 def saveCars():
     with open(carFile, "w") as file:
