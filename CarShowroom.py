@@ -17,18 +17,21 @@ cars = []
 
 def loadCars():
     global cars
-    with open(carFile, "r") as file:
+    try:
+        with open(carFile, "r") as file:
+            cars = []
+            for line in file.readlines():
+                parts = line.strip().split(",")
+                if len(parts) == 5:
+                    cars.append({
+                        "make": parts[0],
+                        "model": parts[1],
+                        "year": parts[2],
+                        "price": parts[3],
+                        "image": parts[4]
+                    })
+    except FileNotFoundError:
         cars = []
-        for line in file.readlines():
-            parts = line.strip().split(",")
-            if len(parts) == 5:
-                cars.append({
-                    "make": parts[0],
-                    "model": parts[1],
-                    "year": parts[2],
-                    "price": parts[3],
-                    "image": parts[4]
-                })
 
 def saveCars():
     with open(carFile, "w") as file:
