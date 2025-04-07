@@ -157,6 +157,14 @@ def showCars(sortOption=None):
             carFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white")
             carFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
             
+            carButton = tk.Button(carFrame,
+                                  bd=0,
+                                  highlightthickness=0,
+                                  relief="flat",
+                                  bg="white",
+                                  command=lambda c=car: showCarDetails(c))
+            carButton.pack(fill="both", expand=True)
+            
             imgLabel = tk.Label(carFrame, image=imgTK, bg="white")
             imgLabel.image = imgTK  
             imgLabel.pack()
@@ -164,12 +172,13 @@ def showCars(sortOption=None):
             
             infoText = f"{car['make']} {car['model']}\nYear: {int(car['year'])}\nPrice: ${float(car['price']):,}"
             tk.Label(carFrame, text=infoText).pack()
+            tk.Label(carButton, text=infoText, bg="white", justify="left").pack()
         except Exception as e:
             print(f"Error loading image for {car['make']} {car['model']}: {e}")
             
             errorFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white")
             errorFrame.grid(row=row, column=col, padx=10, pady=10)
-            tk.Label(errorFrame, text=f"Error loading\n{car['make']} {car['model']}", bg="white").pack()
+            tk.Label(errorFrame, text=f"Error loading\n{car['make']} {car['model']}", bg="white", fg="red").pack()
         
         
         for c in range(3):
@@ -177,7 +186,27 @@ def showCars(sortOption=None):
         for r in range((len(displayCars) + 2) // 3):
             scrollableFrame.rowconfigure(r, weight=1)
         
+def showCarDetails(car):
+    detailWindow = tk.Toplevel(root)
+    detailWindow.title(f"{car['make']} {car['model']} Details")
+    detailWindow.geometry("500x500")
     
+    detailFrame = tk.Frame(detailWindow, padx=20, pady=20)
+    detailFrame.pack(fill="both", expand=True)
+    
+    img = Image.open(car["image"])
+    img = img.resize((350, 250), Image.Resampling.LANCZOS)
+    imgTK = ImageTk.PhotoImage(img)
+    imgLabel = tk.Label(detailFrame, image=imgTK)
+    imgLabel.image = imgTK
+    imgLabel.pack(pady=(0, 15))
+    
+    
+    infoText = f"Make: {car['make']}\nModel: {car['model']}\nYear: {int(car['year'])}\nPrice: ${float(car['price']):,}"
+    tk.Label(detailFrame, text=infoText, font=("Arial", 14), justify="left").pack(pady=(0, 15))
+    tk.Button(detailFrame, text="Close", command=detailWindow.destroy, bg="red", fg="white").pack(pady=(15, 0))
+
+
     
 def addCar():
     for widget in bottomFrame.winfo_children():
