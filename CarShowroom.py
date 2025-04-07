@@ -154,32 +154,28 @@ def showCars(sortOption=None):
             img = img.resize((220, 160), Image.Resampling.LANCZOS)
             imgTK = ImageTk.PhotoImage(img)
             
-            carFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white")
+            carFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white", width=240, height=220)
             carFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
+            carFrame.grid_propagate(False)
             
-            carButton = tk.Button(carFrame,
-                                  bd=0,
-                                  highlightthickness=0,
-                                  relief="flat",
-                                  bg="white",
-                                  command=lambda c=car: showCarDetails(c))
-            carButton.pack(fill="both", expand=True)
+            carCanvas = tk.Canvas(carFrame, bg="white", highlightthickness=0, width=220, height=200)
+            carCanvas.pack(fill="both", expand=True, pady=10)
             
-            imgLabel = tk.Label(carFrame, image=imgTK, bg="white")
-            imgLabel.image = imgTK  
-            imgLabel.pack()
+            carCanvas.bind("<Button-1>", lambda e, c=car: showCarDetails(c))
+            carCanvas.create_image(110, 80, image=imgTK)
             
+            carCanvas.create_text(110, 170, text=f"{car['make']} {car['model']}", font=("Arial", 10, "bold"), anchor="center", fill="black")
+            carCanvas.create_text(110, 190, text=f"Year: {car['year']} | ${float(car['price']):,}", font=("Arial", 9), anchor="center", fill="black")
             
-            infoText = f"{car['make']} {car['model']}\nYear: {int(car['year'])}\nPrice: ${float(car['price']):,}"
-            tk.Label(carFrame, text=infoText).pack()
-            tk.Label(carButton, text=infoText, bg="white", justify="left").pack()
+            carCanvas.image = imgTK
+            
         except Exception as e:
             print(f"Error loading image for {car['make']} {car['model']}: {e}")
             
             errorFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white")
             errorFrame.grid(row=row, column=col, padx=10, pady=10)
             tk.Label(errorFrame, text=f"Error loading\n{car['make']} {car['model']}", bg="white", fg="red").pack()
-        
+            pass
         
         for c in range(3):
             scrollableFrame.columnconfigure(c, weight=1)
