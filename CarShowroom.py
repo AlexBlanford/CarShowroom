@@ -198,7 +198,7 @@ def showCars(sortOption=None):
             def on_enter(e, frame = carFrame, shdw=shadow):
                 carCanvas.configure(cursor="hand2")
                 frame.configure(highlightthickness=2)
-                shdw.configure(bg="b2babb", highlightbackground=PRIMARY_COLOR)
+                shdw.configure(bg="#b2babb", highlightbackground=PRIMARY_COLOR)
                 
             def on_leave(e, frame = carFrame, shdw=shadow):
                 carCanvas.configure(cursor="")
@@ -230,26 +230,75 @@ def showCars(sortOption=None):
         
 def showCarDetails(car):
     detailWindow = tk.Toplevel(root)
-    detailWindow.title(f"{car['make']} {car['model']} Details")
-    detailWindow.geometry("500x500")
+    detailWindow.title(f"{car['make']} {car['model']} ")
+    detailWindow.geometry("600x600")
     
-    detailFrame = tk.Frame(detailWindow, padx=20, pady=20)
+    header = tk.Canvas(detailWindow, height=80, bg=PRIMARY_COLOR, highlightthickness=0)
+    header.pack(fill="x")
+    
+    for i in range(80):
+        color = "#{:02x}{:02x}{:02x}".format(
+            int(44*(1-i/80) + 52*i/80),
+            int(62*(1-i/80) + 152*i/80),
+            int(80*(1-i/80) + 219*i/80)
+        )
+        header.create_line(0, i, 600, i, fill=color)
+        
+    header.create_text(300, 40, text=f"{car['make']} {car['model']}", font=("Segoe UI", 20, "bold"), fill=LIGHT_TEXT) ####
+    
+    detailFrame = tk.Frame(detailWindow, padx=30, pady=30)
     detailFrame.pack(fill="both", expand=True)
     
     try:
         img = Image.open(car["image"])
-        img = img.resize((350, 250), Image.Resampling.LANCZOS)
+        img = img.resize((400, 250), Image.Resampling.LANCZOS)
         imgTK = ImageTk.PhotoImage(img)
-        imgLabel = tk.Label(detailFrame, image=imgTK)
+        
+        imgLabel = tk.Label(detailFrame, image=imgTK, bg=BG_COLOR)
         imgLabel.image = imgTK
         imgLabel.pack(pady=(0, 15))
     except Exception as e:
-        tk.Label(detailFrame, text="Error loading image", font= ("Arial", 14), fg="red").pack(pady=(0, 15))
+        tk.Label(detailFrame, text="Error loading image", font= ("Segoe UI", 14), fg=ACCENT_COLOR, bg=BG_COLOR).pack()
     
+    details = tk.Frame(detailFrame, bg=BG_COLOR)
+    details.pack(fill="x")
     
-    infoText = f"Make: {car['make']}\nModel: {car['model']}\nYear: {int(car['year'])}\nPrice: ${float(car['price']):,}"
-    tk.Label(detailFrame, text=infoText, font=("Arial", 14), justify="left").pack(pady=(0, 15))
-    tk.Button(detailFrame, text="Close", command=detailWindow.destroy, bg="red", fg="white").pack(pady=(15, 0))
+    specs = [
+        ("Year:", car["year"]),
+        ("Price:", f"${float(car['price']):,}"),
+        ("Status:", "Available")
+    ]
+    
+    for i, (label, value) in enumerate(specs):
+        tk.Label(details,
+                 text=label ,
+                 font = ("Segoe UI", 12),
+                 fg=TEXT_COLOR,
+                 bg=BG_COLOR).grid(row=i, column=0, sticky="e", padx=(0, 10))
+        
+        tk.Label(details,
+                 text=value,
+                 font = ("Segoe UI", 12, "bold"),
+                 fg=PRIMARY_COLOR,
+                 bg=BG_COLOR).grid(row=i, column=1, sticky="w")
+        
+    btnFrame = tk.Frame(detailFrame, bg=BG_COLOR, pady=20)
+    btnFrame.pack()
+    
+    tk.Button(btnFrame,
+              text="Close",
+              bg=ACCENT_COLOR,
+              fg="white",
+              activebackground="#c0392b",
+              font=("Segoe UI", 12, "bold"),
+              padx=20,
+              pady=5,
+              bd=0,
+              command=detailWindow.destroy).pack(side="left", padx=5)
+              
+              
+                 
+                 
 
 
     
