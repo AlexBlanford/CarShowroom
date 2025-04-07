@@ -1,6 +1,14 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
+
+BG_COLOR = "#faf9fa"
+CAR_COLOR= "#ffffff"
+PRIMARY_COLOR= "#2c3e50"
+SECONDARY_COLOR= "#3498db"
+ACCENT_COLOR= "#e74c3c"
+TEXT_COLOR= "#2c3e50"
+LIGHT_TEXT= "#ecf0f1"
 
 
 defaultCars = [
@@ -72,9 +80,15 @@ def showCars(sortOption=None):
     for widget in bottomFrame.winfo_children():
         widget.destroy()
         
-    sortFrame = tk.Frame(bottomFrame)
-    sortFrame.pack(fill="x", pady=(0, 20))
+    sortFrame = tk.Frame(bottomFrame, bg=BG_COLOR, pady=10)
+    sortFrame.pack(fill="x")
 
+    tk.Label(sortFrame, text="Sort By:", bg=BG_COLOR, fg=TEXT_COLOR, font=("Segoe UI", 10)).pack(side="left", padx=(20,5))
+    
+    style = ttk.Style()
+    style.theme_use('clam')
+    style.configure("TCombobox", fieldbackground=CAR_COLOR, background=CAR_COLOR, foreground=TEXT_COLOR, bordercolor=PRIMARY_COLOR, arrowcolor=PRIMARY_COLOR, font=("Segoe UI", 9))
+    
     sortDisplayayMap = {
         None: "Default Order",
         "price_asc": "Price: Low to High",
@@ -98,6 +112,7 @@ def showCars(sortOption=None):
                                    "Year: Oldest First",
                                    "Year: Newest First"
                                ],
+                               style='TCombobox',
                                state="readonly",
                                width=25)
     
@@ -154,18 +169,49 @@ def showCars(sortOption=None):
             img = img.resize((220, 160), Image.Resampling.LANCZOS)
             imgTK = ImageTk.PhotoImage(img)
             
-            carFrame = tk.Frame(scrollableFrame, bd=1, relief="groove", bg="white", width=240, height=220)
-            carFrame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
+            carFrame = tk.Frame(scrollableFrame, bg=CAR_COLOR, bd=0, highlightthickness=0, highlightbackground=PRIMARY_COLOR, width=240, height=220)
+            carFrame.grid(row=row, column=col, padx=15, pady=15)
             carFrame.grid_propagate(False)
             
-            carCanvas = tk.Canvas(carFrame, bg="white", highlightthickness=0, width=220, height=200)
-            carCanvas.pack(fill="both", expand=True, pady=10)
+            shadow = tk.Frame(scrollableFrame, bg="#d5d8dc")
+            shadow.grid(row=row, column=col, padx=15, pady=15, sticky = "nsew")
+            shadow.lower(carFrame)
             
+            carCanvas = tk.Canvas(carFrame, bg=CAR_COLOR, highlightthickness=0, width=250, height=250)
+            carCanvas.pack()
+            
+            img = Image.open(car["image"])
+            img = img.resize((230, 150), Image.Resampling.LANCZOS)
+            
+            mask = Image.new("L", (230,150), 0)
+            draw = ImageDraw.Draw(mask)
+            draw.rounded_rectangle((0, 0, 230, 150), radius=10, fill=255)
+            img.putalpha(mask)
+            
+            imgTK = ImageTk.PhotoImage(img)
+            carCanvas.create_image(125, 85, image=imgTK)
+            
+            carCanvas.create_text(125, 170, text=f"{car['make']} {car['model']}", font=("Segoe UI", 12, "bold"), fill=PRIMARY_COLOR)
+            carCanvas.create_text(110, 190, text=f"Year: {car['year']} • ${float(car['price']):,}", font=("Segoe UI", 10), fill=SECONDARY_COLOR)
+            
+            
+            def on_enter(e, frame = carFrame, shdw=shadow):
+                carCanvas.configure(cursor="hand2")
+                frame.configure(highlightthickness=2)
+                shdw.configure(bg="b2babb", highlightbackground=PRIMARY_COLOR)
+                
+            def on_leave(e, frame = carFrame, shdw=shadow):
+                carCanvas.configure(cursor="")
+                frame.configure(highlightthickness=0)
+                shdw.configure(bg="#d5d8dc")
+            
+            
+            
+            carCanvas.bind("<Enter>", on_enter)
+            carCanvas.bind("<Leave>", on_leave)
             carCanvas.bind("<Button-1>", lambda e, c=car: showCarDetails(c))
-            carCanvas.create_image(110, 80, image=imgTK)
             
-            carCanvas.create_text(110, 170, text=f"{car['make']} {car['model']}", font=("Arial", 10, "bold"), anchor="center", fill="black")
-            carCanvas.create_text(110, 190, text=f"Year: {car['year']} | ${float(car['price']):,}", font=("Arial", 9), anchor="center", fill="black")
+
             
             carCanvas.image = imgTK
             
