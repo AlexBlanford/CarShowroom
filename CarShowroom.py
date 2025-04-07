@@ -194,12 +194,15 @@ def showCarDetails(car):
     detailFrame = tk.Frame(detailWindow, padx=20, pady=20)
     detailFrame.pack(fill="both", expand=True)
     
-    img = Image.open(car["image"])
-    img = img.resize((350, 250), Image.Resampling.LANCZOS)
-    imgTK = ImageTk.PhotoImage(img)
-    imgLabel = tk.Label(detailFrame, image=imgTK)
-    imgLabel.image = imgTK
-    imgLabel.pack(pady=(0, 15))
+    try:
+        img = Image.open(car["image"])
+        img = img.resize((350, 250), Image.Resampling.LANCZOS)
+        imgTK = ImageTk.PhotoImage(img)
+        imgLabel = tk.Label(detailFrame, image=imgTK)
+        imgLabel.image = imgTK
+        imgLabel.pack(pady=(0, 15))
+    except Exception as e:
+        tk.Label(detailFrame, text="Error loading image", font= ("Arial", 14), fg="red").pack(pady=(0, 15))
     
     
     infoText = f"Make: {car['make']}\nModel: {car['model']}\nYear: {int(car['year'])}\nPrice: ${float(car['price']):,}"
