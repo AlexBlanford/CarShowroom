@@ -54,13 +54,15 @@ def loadCars():
             cars = []
             for line in file.readlines():
                 parts = line.strip().split(",")
-                if len(parts) == 5:
+                if len(parts) >= 5:
                     cars.append({
                         "make": parts[0],
                         "model": parts[1],
                         "year": parts[2],
                         "price": parts[3],
-                        "image": parts[4]
+                        "image": parts[4],
+                        "mileage": parts[5] if len(parts) > 5 else "N/A",
+                        "description": parts[6] if len(parts) > 6 else ""
                     })
         if not cars:
             cars = defaultCars.copy()
@@ -72,7 +74,7 @@ def loadCars():
 def saveCars():
     with open(carFile, "w") as file:
         for car in cars:
-            file.write(f"{car['make']},{car['model']},{car['year']},{car['price']},{car['image']}\n")
+            file.write(f"{car['make']},{car['model']},{car['year']},{car['price']},{car['image']},{car.get('mileage', 'N/A')},{car.get('description', '')}\n")
             
             
             
@@ -231,7 +233,7 @@ def showCars(sortOption=None):
 def showCarDetails(car):
     detailWindow = tk.Toplevel(root)
     detailWindow.title(f"{car['make']} {car['model']} ")
-    detailWindow.geometry("600x600")
+    detailWindow.geometry("600x700")
     
     header = tk.Canvas(detailWindow, height=80, bg=PRIMARY_COLOR, highlightthickness=0)
     header.pack(fill="x")
@@ -256,7 +258,7 @@ def showCarDetails(car):
         
         imgLabel = tk.Label(detailFrame, image=imgTK, bg=BG_COLOR)
         imgLabel.image = imgTK
-        imgLabel.pack(pady=(0, 15))
+        imgLabel.pack(pady=(0, 20))
     except Exception as e:
         tk.Label(detailFrame, text="Error loading image", font= ("Segoe UI", 14), fg=ACCENT_COLOR, bg=BG_COLOR).pack()
     
@@ -266,7 +268,7 @@ def showCarDetails(car):
     specs = [
         ("Year:", car["year"]),
         ("Price:", f"${float(car['price']):,}"),
-        ("Status:", "Available")
+        ("Mileage:", "30,000 km" if "mileage" not in car else f"{car['mileage']} km")
     ]
     
     for i, (label, value) in enumerate(specs):
@@ -281,6 +283,28 @@ def showCarDetails(car):
                  font = ("Segoe UI", 12, "bold"),
                  fg=PRIMARY_COLOR,
                  bg=BG_COLOR).grid(row=i, column=1, sticky="w")
+        
+    tk.Label(details,
+             text="Description:",
+             font = ("Segoe UI", 12),
+             fg=TEXT_COLOR,
+             bg=BG_COLOR).grid(row=len(specs), column=0, sticky="ne", padx=(0, 10), pady=(10, 0))
+    
+    descText = car.get("description", "No description available.")
+    description = tk.Text(details,
+                        wrap="word",
+                        font=("Segoe UI", 12),
+                        bg=CAR_COLOR,
+                        fg=TEXT_COLOR,
+                        height=6,
+                        width=40,
+                        padx=10,
+                        pady=10,
+                        highlightthickness=0,
+                        bd=0)
+    description.insert("1.0", descText)
+    description.config(state="disabled")
+    description.grid(row=len(specs), column=1, sticky="w", pady=(10, 0))
         
     btnFrame = tk.Frame(detailFrame, bg=BG_COLOR, pady=20)
     btnFrame.pack()
@@ -308,7 +332,7 @@ def addCar():
 
     tk.Label(bottomFrame, text="Add New Car", font=("Arial", 16, "bold")).pack(pady=10)
 
-    fields = ["Make:", "Model:", "Year:", "Price:", "Image Path:"]
+    fields = ["Make:", "Model:", "Year:", "Price:", "Mileage:", "Description:", "Image Path:"]
     entries = []
     for field in fields:
         frame = tk.Frame(bottomFrame)
@@ -321,16 +345,17 @@ def addCar():
     def browseImage():
         path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg *.png")])
         if path:
-            entries[4].delete(0, tk.END)
-            entries[4].insert(0, path)
+            entries[6].delete(0, tk.END)
+            entries[6].insert(0, path)
 
     browseButton = tk.Button(bottomFrame, text="Browse Image", command=browseImage)
     browseButton.pack(pady=5)
     
     def submitCar():
         data = [entry.get() for entry in entries]
-        if not all(data):
-            messagebox.showwarning("Error", "Please fill in all the fields!")
+        reqFields = data[:4] + [data[6]]
+        if not all(reqFields):
+            messagebox.showwarning("Error", "Please fill in all the required fields!")
             return
         
         cars.append({
@@ -338,7 +363,9 @@ def addCar():
             "model": data[1],
             "year": data[2],
             "price": data[3],
-            "image": data[4]
+            "mileage": data[4] or "N/A",
+            "description": data[5] or "",
+            "image": data[6]
         })
         saveCars()
         messagebox.showinfo("Success", "Car added successfully!")

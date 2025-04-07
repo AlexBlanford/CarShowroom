@@ -1,11 +1,12 @@
-Toyota,Camry,2020,24000,camry.jpg
-Honda,Civic,2019,22000,civic.jpg
-Ford,Mustang,2021,30000,mustang.jpg
-sdf,sdf,23,324,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png
-ea,2,234,324,/Users/alexblanford/Downloads/red-circle-icon-1.png
-asd,asd,234,234234,/Users/alexblanford/Downloads/pngimg.com - circle_PNG47.png
-asd,asd,234,342,/Users/alexblanford/Downloads/red-circle-icon-1.png
-sdf,sdf,23,324,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png
-ea,2,234,324,/Users/alexblanford/Downloads/red-circle-icon-1.png
-asd,asd,234,234234,/Users/alexblanford/Downloads/pngimg.com - circle_PNG47.png
-asd,asd,234,342,/Users/alexblanford/Downloads/red-circle-icon-1.png
+Toyota,Camry,2020,24000,camry.jpg,N/A,
+Honda,Civic,2019,22000,civic.jpg,N/A,
+Ford,Mustang,2021,30000,mustang.jpg,N/A,
+sdf,sdf,23,324,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png,N/A,
+ea,2,234,324,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
+asd,asd,234,234234,/Users/alexblanford/Downloads/pngimg.com - circle_PNG47.png,N/A,
+asd,asd,234,342,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
+sdf,sdf,23,324,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png,N/A,
+ea,2,234,324,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
+asd,asd,234,234234,/Users/alexblanford/Downloads/pngimg.com - circle_PNG47.png,N/A,
+asd,asd,234,342,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
+sdf,sdf,234,234,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png,234442,This is something im not sure of just testing
