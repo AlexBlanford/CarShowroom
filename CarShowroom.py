@@ -175,13 +175,16 @@ def showCars(sortOption=None):
     canvas.pack(side="left", fill="both", expand=True)
     scrollBar.pack(side="right", fill="y")
     canvas.create_window((0, 0), window=scrollableFrame, anchor="nw")
+    
+    screenWidth = root.winfo_width()
+    columns = max(3, screenWidth // 300)
 
 
 
     for i in range(len(displayCars)):
         car = displayCars[i]
-        row = i // 3
-        col = i % 3
+        row = i // columns
+        col = i % columns
         
         try:
             img = Image.open(car["image"])
@@ -192,7 +195,7 @@ def showCars(sortOption=None):
             carFrame.grid(row=row, column=col, padx=15, pady=15)
             carFrame.grid_propagate(False)
             
-            shadow = tk.Frame(scrollableFrame, bg="#d5d8dc")
+            shadow = tk.Frame(scrollableFrame, bg=SHADOW_COLOR)
             shadow.grid(row=row, column=col, padx=15, pady=15, sticky = "nsew")
             shadow.lower(carFrame)
             
@@ -240,10 +243,21 @@ def showCars(sortOption=None):
             tk.Label(errorFrame, text=f"Error loading\n{car['make']} {car['model']}", bg="white", fg="red").pack()
             pass
         
-        for c in range(3):
+        for c in range(columns):
             scrollableFrame.columnconfigure(c, weight=1)
-        for r in range((len(displayCars) + 2) // 3):
+            
+        rows=(len(displayCars) + columns - 1) // columns
+        for r in range(rows):
             scrollableFrame.rowconfigure(r, weight=1)
+        
+        def onResize(event):
+            nonlocal columns
+            newColumns = max(3, event.width // 300)
+            if newColumns != columns:
+                columns = newColumns
+                showCars(sortOption)
+                
+        canvas.bind("<Configure>", onResize)
         
 def showCarDetails(car):
     detailWindow = tk.Toplevel(root)
