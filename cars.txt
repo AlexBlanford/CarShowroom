@@ -1,13 +1,4 @@
 Toyota,Camry,2020,24000,camry.jpg,30000,A reliable and fuel-efficient sedan with advanced safety features.
 Honda,Civic,2019,22000,civic.jpg,26000,A reliable and popular compact car known for its fuel efficiency
 Ford,Mustang,2021,30000,mustang.jpg,40000,An iconic American muscle car known for its sporty styling and powerful engine.
-sdf,sdf,23,324,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png,N/A,
-ea,2,234,324,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
-asd,asd,234,234234,/Users/alexblanford/Downloads/pngimg.com - circle_PNG47.png,N/A,
-asd,asd,234,342,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
-sdf,sdf,23,324,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png,N/A,
-ea,2,234,324,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
-asd,asd,234,234234,/Users/alexblanford/Downloads/pngimg.com - circle_PNG47.png,N/A,
-asd,asd,234,342,/Users/alexblanford/Downloads/red-circle-icon-1.png,N/A,
-sdf,sdf,234,234,/Users/alexblanford/Downloads/6536715701cd4115bc84d3ae_4.png,234442,This is something im not sure of just testing
-kfjhdenichd dfjfb,idfjhsdkjf,678909876,7876789,/Users/alexblanford/Downloads/mclaren.jpg,678765678,testing 6
+
