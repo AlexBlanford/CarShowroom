@@ -49,7 +49,14 @@ carFile = "cars.txt"
 
 root = tk.Tk()
 root.title("Car Showroom")
-root.geometry("900x700")
+root.attributes('-fullscreen', True)
+root.configure(bg=BG_COLOR)
+
+def toggleFull(event=None):
+    root.attributes('-fullscreen', not root.attributes('-fullscreen'))
+    
+root.bind("<F11>", toggleFull)
+root.bind("<Escape>", toggleFull)
 
 
 
