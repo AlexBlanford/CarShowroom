@@ -9,6 +9,14 @@ SECONDARY_COLOR= "#3498db"
 ACCENT_COLOR= "#e74c3c"
 TEXT_COLOR= "#2c3e50"
 LIGHT_TEXT= "#ecf0f1"
+BTN_COLOR= "#3a5673"
+
+TITLE_FONT = ("Segoe UI", 24, "bold")
+HEADER_FONT = ("Segoe UI", 14, "bold")
+BODY_FONT = ("Segoe UI", 11)
+BTN_FONT = ("Segoe UI", 12, "bold")
+
+
 
 
 defaultCars = [
@@ -168,7 +176,7 @@ def showCars(sortOption=None):
         
         try:
             img = Image.open(car["image"])
-            img = img.resize((220, 160), Image.Resampling.LANCZOS)
+            img = img.resize((230, 150), Image.Resampling.LANCZOS)
             imgTK = ImageTk.PhotoImage(img)
             
             carFrame = tk.Frame(scrollableFrame, bg=CAR_COLOR, bd=0, highlightthickness=0, highlightbackground=PRIMARY_COLOR, width=240, height=220)
@@ -182,8 +190,6 @@ def showCars(sortOption=None):
             carCanvas = tk.Canvas(carFrame, bg=CAR_COLOR, highlightthickness=0, width=250, height=250)
             carCanvas.pack()
             
-            img = Image.open(car["image"])
-            img = img.resize((230, 150), Image.Resampling.LANCZOS)
             
             mask = Image.new("L", (230,150), 0)
             draw = ImageDraw.Draw(mask)
@@ -233,7 +239,7 @@ def showCars(sortOption=None):
 def showCarDetails(car):
     detailWindow = tk.Toplevel(root)
     detailWindow.title(f"{car['make']} {car['model']} ")
-    detailWindow.geometry("600x700")
+    detailWindow.geometry("620x730")
     
     header = tk.Canvas(detailWindow, height=80, bg=PRIMARY_COLOR, highlightthickness=0)
     header.pack(fill="x")
@@ -316,7 +322,7 @@ def showCarDetails(car):
               activebackground="#c0392b",
               font=("Segoe UI", 12, "bold"),
               padx=20,
-              pady=5,
+              pady=3,
               bd=0,
               command=detailWindow.destroy).pack(side="left", padx=5)
               
@@ -378,16 +384,27 @@ def addCar():
     
 
 
-titleName = tk.Label(root, text="Car Showroom", font=("Helvetica", 30, "bold"))
-titleName.pack(pady=20)
 
 bottomFrame = tk.Frame(root)
 bottomFrame.pack(side="bottom")
 bottomFrame.pack(fill="both", expand=True, padx=20, pady=20)    
 
+headerMain=tk.Frame(root, bg=PRIMARY_COLOR, height=80)
+headerMain.pack(fill="x", pady=(0, 20))
 
-tk.Button(root, text="View Cars", command = showCars, fg="blue", width=15, height = 3).pack(side="left", padx=10)
-tk.Button(root, text="Add Car", command = addCar, fg="red", width = 15, height = 3).pack(side="left", padx=10)
+titleLabel = tk.Label(headerMain, text="Premium Car Showroom", font=TITLE_FONT, bg=PRIMARY_COLOR, fg=LIGHT_TEXT)
+titleLabel.pack(pady=20)
+
+
+navFrame = tk.Frame(root, bg=BG_COLOR)
+navFrame.pack(pady=(0, 20))
+
+viewCarsButton = ttk.Button(navFrame, text="View Cars", command=showCars, style = 'TButton')
+viewCarsButton.pack(side="left", padx=10)
+
+addCarButton = ttk.Button(navFrame, text="Add Car", command=addCar, style = 'TButton')
+addCarButton.pack(side="left", padx=10)
+
 
 
 
