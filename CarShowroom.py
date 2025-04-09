@@ -10,6 +10,8 @@ ACCENT_COLOR= "#e74c3c"
 TEXT_COLOR= "#2c3e50"
 LIGHT_TEXT= "#ecf0f1"
 BTN_COLOR= "#3a5673"
+BUTTON_HOVER= "#2980b9"
+SHADOW_COLOR= "#d5d8dc"
 
 TITLE_FONT = ("Segoe UI", 24, "bold")
 HEADER_FONT = ("Segoe UI", 14, "bold")
@@ -336,32 +338,156 @@ def addCar():
     for widget in bottomFrame.winfo_children():
         widget.destroy()
 
-    tk.Label(bottomFrame, text="Add New Car", font=("Arial", 16, "bold")).pack(pady=10)
+    container = tk.Frame(bottomFrame, bg=BG_COLOR, padx=40, pady=30)
+    container.pack(fill="both", expand=True)
 
-    fields = ["Make:", "Model:", "Year:", "Price:", "Mileage:", "Description:", "Image Path:"]
+    header = tk.Frame(container, bg=PRIMARY_COLOR)  
+    header.pack(fill="x", pady=(0, 20))
+    
+    gradientCan = tk.Canvas(header, height=60, bg=PRIMARY_COLOR, highlightthickness=0)  
+    gradientCan.pack(fill="x")
+    
+    width=800
+    for i in range(60):
+        r = int(44*(1-i/60) + 52*i/60)
+        g = int(62*(1-i/60) + 152*i/60)
+        b = int(80*(1-i/60) + 219*i/60)
+        color = f"#{r:02x}{g:02x}{b:02x}"
+        gradientCan.create_line(0, i, width, i, fill=color)
+        
+    gradientCan.create_text(width/2, 30, text="Add New Car", font=("Segoe UI", 18, "bold"), fill=LIGHT_TEXT)
+    
+    formShdw = tk.Frame(container, bg=SHADOW_COLOR)
+    formShdw.pack(pady=(0, 20))
+    
+    formFrame = tk.Frame(formShdw, bg=CAR_COLOR, padx=30, pady=25)
+    formFrame.pack(padx=3, pady=3)
+    
+    tk.Label(formFrame, text="* Required Fields", font=("Segoe UI", 9), fg=ACCENT_COLOR, bg=CAR_COLOR).grid(row=0, column=1, sticky="e", pady=(0,15))
+    
+    
+    fields = [
+        ("Make*:", "Toyota, Honda, etc."),
+        ("Model*:", "Camdry, Civic, etc."),
+        ("Year*:", "2020"),
+        ("Price*:", "32000"),
+        ("Mileage:", "30000"),
+        ("Description:", "Vehicle details..."),
+        ("Image Path*:", "car.jpg")
+        ]
     entries = []
-    for field in fields:
-        frame = tk.Frame(bottomFrame)
-        frame.pack(fill="x", padx=20, pady=5)
-        tk.Label(frame, text=field, width=12, anchor="w").pack(side="left")
-        entry = tk.Entry(frame, bg="lightgrey", fg="white")
-        entry.pack(side="left", expand=True, fill="x")
+    
+    for i, (label, placeholder) in enumerate(fields):
+        lbl = tk.Label(formFrame, text=label, font=BODY_FONT, bg=CAR_COLOR, fg=TEXT_COLOR, anchor="w")
+        lbl.grid(row=i+1, column=0, sticky="w", pady=5, padx=(0, 10))
+        
+        if label.endswith("*:"):
+            lbl.config(fg=ACCENT_COLOR)
+            
+        if label == "Description:":
+            entry = tk.Text(formFrame, height=5, width=40, font=BODY_FONT, bg=CAR_COLOR, fg=TEXT_COLOR, padx=10, pady=8, wrap="word", highlightthickness=1, highlightbackground="#dfe6e9", highlightcolor=SECONDARY_COLOR)
+            entry.insert("1.0", placeholder)
+                
+            
+            def focusIn(event, widget=entry, ph=placeholder):
+                if widget.get("1.0", "end-1c") == ph:
+                    widget.delete("1.0", "end")
+                    widget.config(fg=TEXT_COLOR)
+                    
+            def focusOut(event, widget=entry, ph=placeholder):
+                if not widget.get("1.0", "end-1c"):
+                    widget.insert("1.0", ph)
+                    widget.config(fg="#95a5a6")
+                    
+            entry.bind("<FocusIn>", focusIn)
+            entry.bind("<FocusOut>", focusOut)
+            
+            entry.grid(row=i+1, column=1, sticky = "ew", pady=5)
+        else:
+            entry = tk.Entry(formFrame, font=BODY_FONT, bg=CAR_COLOR, fg=TEXT_COLOR, highlightthickness=1, highlightbackground="#dfe6e9", highlightcolor=SECONDARY_COLOR)
+            entry.insert(0, placeholder)
+            
+            def focusIn(event, widget=entry, ph=placeholder):
+                if widget.get() == ph:
+                    widget.delete(0, "end")
+                    widget.config(fg=TEXT_COLOR)
+                    
+            def focusOut(event, widget=entry, ph=placeholder):
+                if not widget.get():
+                    widget.insert(0, ph)
+                    widget.config(fg="#95a5a6")
+                    
+            entry.bind("<FocusIn>", focusIn)
+            entry.bind("<FocusOut>", focusOut)
+            
+            entry.grid(row=i+1, column=1, sticky = "ew", pady=5, ipady=5)
+            
         entries.append(entry)
         
     def browseImage():
-        path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg *.png")])
+        path = filedialog.askopenfilename(
+            title="Select an Image",
+            filetypes=[("Image Files", "*.jpg *.jpeg *.png"), ("All Files", "*.*")]
+        )
         if path:
-            entries[6].delete(0, tk.END)
+            entries[6].delete(0, "end")
             entries[6].insert(0, path)
+            entries[6].config(fg=TEXT_COLOR)
 
-    browseButton = tk.Button(bottomFrame, text="Browse Image", command=browseImage)
-    browseButton.pack(pady=5)
+        
+    def createButton(parent, text, command, bgC = SECONDARY_COLOR, fgC = LIGHT_TEXT):
+        btn = tk.Button(parent, text=text, command=command, bg=bgC, fg=fgC, activebackground=BUTTON_HOVER, activeforeground=LIGHT_TEXT, font=BTN_FONT, bd=0, padx=20, pady=10, relief=tk.FLAT, cursor="hand2")
+        
+        def onEnter(e):
+            btn['background'] = BUTTON_HOVER
+            
+        def onLeave(e):
+            btn['background'] = bgC
+            
+        btn.bind("<Enter>", onEnter)
+        btn.bind("<Leave>", onLeave)
+        return btn
+
+    browseButton = createButton(formFrame, text="Browse Image", command=browseImage, bgC="#95a5a6", fgC=LIGHT_TEXT)
+    browseButton.grid(row=6, column=2, padx=(10, 0), sticky="w")
+    
+    btnContainer = tk.Frame(container, bg=BG_COLOR)
+    btnContainer.pack(pady=(10, 0))
     
     def submitCar():
-        data = [entry.get() for entry in entries]
-        reqFields = data[:4] + [data[6]]
-        if not all(reqFields):
-            messagebox.showwarning("Error", "Please fill in all the required fields!")
+        data = []
+        
+        for i, entry in enumerate(entries):
+            if i ==5:
+                content = entry.get("1.0", "end-1c")
+                data.append(content if content != fields[i][1] else "")
+            else:
+                content = entry.get()
+                data.append(content if content != fields[i][1] else "")
+            
+        reqFields = [0,1,2,3,4,5]
+        missFields = []
+        
+        for i in reqFields:
+            if not data[i] or data[i] == fields[i][1]:
+                fieldName = fields[i][0].replace("*:", "")
+                missFields.append(fieldName)
+                entries[i].config(highlightbackground=ACCENT_COLOR, highlightcolor=ACCENT_COLOR)
+            else:
+                entries[i].config(highlightbackground="#dfe6e9", highlightcolor=SECONDARY_COLOR)
+                
+        if missFields:
+            messagebox.showwarning(
+                "Missing Information",
+                f"Please fill in all required fields:\n{', '.join(missFields)}"
+            )
+            return
+        
+        try:
+            Image.open(data[6])
+        except Exception as e:
+            messagebox.showerror("Invalid Image", "Please select a valid image file.")
+            entries[6].config(highlightbackground=ACCENT_COLOR, highlightcolor=ACCENT_COLOR)
             return
         
         cars.append({
@@ -369,16 +495,23 @@ def addCar():
             "model": data[1],
             "year": data[2],
             "price": data[3],
-            "mileage": data[4] or "N/A",
-            "description": data[5] or "",
+            "mileage": data[4] if data[4] and data[4] != fields[4][1] else "N/A",
+            "description": data[5] if data[5] else "",
             "image": data[6]
         })
+        
         saveCars()
         messagebox.showinfo("Success", "Car added successfully!")
         showCars()
 
-    tk.Button(bottomFrame, text="Add Car", command=submitCar, bg="green", fg="black", font=("Arial", 12, "bold")).pack(pady=20)
+    submitButton = createButton(btnContainer, text="Add Car", command=submitCar, bgC="#27ae60", fgC=LIGHT_TEXT)
+    submitButton.pack(side="left", padx=10)
     
+    cancelButton = createButton(btnContainer, text="Cancel", command=showCars, bgC=ACCENT_COLOR, fgC=LIGHT_TEXT)
+    cancelButton.pack(side="left", padx=10)
+    
+    formFrame.columnconfigure(1, weight=1)
+        
     
 
     
