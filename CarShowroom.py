@@ -586,13 +586,13 @@ titleLabel.pack(pady=20)
 #navigation frame 
 navFrame = tk.Frame(root, bg=BG_COLOR)
 navFrame.pack(pady=(0, 20))
-
+#creates the view Cars button 
 viewCarsButton = ttk.Button(navFrame, text="View Cars", command=showCars, style = 'TButton')
 viewCarsButton.pack(side="left", padx=10)
-
+#creates the add car button
 addCarButton = ttk.Button(navFrame, text="Add Car", command=addCar, style = 'TButton')
 addCarButton.pack(side="left", padx=10)
-
+#creates the exit button
 exitButton = ttk.Button(navFrame, text="Exit", command=root.quit, style = 'TButton')
 exitButton.pack(side="left", padx=10)
 
